@@ -4,19 +4,34 @@
     padding: 0;
 }
 
+:root {
+    --button-color: #9d1919;
+}
+
 h1 {
     font-weight: bold;
     color: #0f0e0e;
 }
 
 .game-container {
+    display: flex;
+    flex-direction: column;
     height: 100vh;
     background: linear-gradient(#1DA1F2, #009ffc);
+}
+
+main {
+    flex: 1;
 }
 
 .bird {
     height: 50px;
     width: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: float 1.5s ease-in-out infinite;
 }
 
 .bird img {
@@ -29,21 +44,28 @@ h1 {
     background: brown;
     width: 100%;
     height: 50px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 .pipe {
     background: greenyellow;
     width: 50px;
     height: 300px;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 button {
     padding: 10px 20px;
     border: none;
     border-radius: 8px;
-    background: #9d1919;
+    background: var(--button-color);
     color: white;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
@@ -54,7 +76,39 @@ button:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap:20px;
+    gap: 20px;
+}
+
+@media (max-width:600px) {
+    .bird {
+        width: 30px;
+        height: 30px;
+    }
+
+    .pipe {
+        width: 30px;
+        height: 200px;
+    }
+}
+
+.playground {
+    position: relative;
+    height: 100%;
+
+}
+
+@keyframes float {
+    0% {
+        transform: translate(-50%, -50%) translateY(0px);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) translateY(-15px);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) translateY(0px);
+    }
 }
 
 #score {}
