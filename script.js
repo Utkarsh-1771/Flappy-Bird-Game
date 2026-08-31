@@ -60,6 +60,15 @@ setInterval(() => {
         pipe.top.style.right = pipe.position + "px";
         pipe.bottom.style.right = pipe.position + "px";
     });
+    pipes=pipes.filter((pipe)=>{
+        if(pipe.position>playground.offsetWidth+50)
+        {
+            pipe.top.remove();
+            pipe.bottom.remove();
+            return false;
+        }
+        return true;
+    });
 }, 20);
 setInterval(() => {
     if (isRunning) {
