@@ -67,6 +67,10 @@ button {
     transition: background-color 0.3s ease;
 }
 
+#restart-button {
+    display: none;
+}
+
 button:hover {
     background: #620606;
 }

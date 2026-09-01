@@ -27,7 +27,15 @@ function createPipe() {
     bottomPipe.style.right = "0px";
     bottomPipe.style.top = "auto";
     playground.appendChild(bottomPipe);
-    pipes.push({ top: topPipe, bottom: bottomPipe, position: 0 });
+    pipes.push({ top: topPipe, bottom: bottomPipe, position: 0, scored: false });
+}
+function isColliding(rectA, rectB) {
+    return (
+        rectA.left < rectB.right &&
+        rectA.right > rectB.left &&
+        rectA.top < rectB.bottom &&
+        rectA.bottom > rectB.top
+    );
 }
 
 start.addEventListener("click", function () {
@@ -47,7 +55,7 @@ document.addEventListener("keydown", function (event) {
         bird.style.top = birdPosition + "px";
     }
 });
-setInterval(() => {
+const gameLoop = setInterval(() => {
     birdPosition = birdPosition + 4;
     bird.style.top = birdPosition + "px";
     if (birdPosition < 0)
@@ -60,15 +68,39 @@ setInterval(() => {
         pipe.top.style.right = pipe.position + "px";
         pipe.bottom.style.right = pipe.position + "px";
     });
-    pipes=pipes.filter((pipe)=>{
-        if(pipe.position>playground.offsetWidth+50)
-        {
+    pipes = pipes.filter((pipe) => {
+        if (pipe.position > playground.offsetWidth + 50) {
             pipe.top.remove();
             pipe.bottom.remove();
             return false;
         }
         return true;
     });
+    const birdRect = bird.getBoundingClientRect();
+    let hit = false;
+    pipes.forEach((pipe) => {
+        const topRect = pipe.top.getBoundingClientRect();
+        if (!pipe.scored && topRect.right < birdRect.left) {
+            score++;
+            pipe.scored = true;
+            scoreDisplay.textContent = score;
+        }
+    });
+    pipes.forEach((pipe) => {
+        const topRect = pipe.top.getBoundingClientRect();
+        const bottomRect = pipe.bottom.getBoundingClientRect();
+        if (isColliding(birdRect, topRect) || isColliding(birdRect, bottomRect)) {
+            hit = true;
+        }
+    });
+    if (birdPosition >= playground.offsetHeight - 50 - 50) {
+        hit = true;
+    }
+    if (hit) {
+        isRunning = false;
+        clearInterval(gameLoop);
+        restart.style.display = "block";
+    }
 }, 20);
 setInterval(() => {
     if (isRunning) {
