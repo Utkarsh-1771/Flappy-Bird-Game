@@ -3,6 +3,8 @@ let birdPosition = 50;
 let isRunning = false;
 let pipePosition = 0;
 let pipes = [];
+let gameLoop;
+let velocity = 0;
 const bird = document.querySelector(".bird");
 const scoreDisplay = document.querySelector("#score");
 const start = document.querySelector("#start-button");
@@ -41,12 +43,14 @@ function isColliding(rectA, rectB) {
 start.addEventListener("click", function () {
     start.style.display = "none";
     isRunning = true;
+    startGameLoop();
     scoreDisplay.textContent = "0";
 });
 document.addEventListener("keydown", function (event) {
     if (event.code === "Space" && isRunning) {
         event.preventDefault();
-        birdPosition = birdPosition - 40;
+        // birdPosition = birdPosition - 40;
+        velocity = -8;              
         bird.style.top = birdPosition + "px";
         if (birdPosition < 0)
             birdPosition = 0;
@@ -55,53 +59,73 @@ document.addEventListener("keydown", function (event) {
         bird.style.top = birdPosition + "px";
     }
 });
-const gameLoop = setInterval(() => {
-    birdPosition = birdPosition + 4;
-    bird.style.top = birdPosition + "px";
-    if (birdPosition < 0)
-        birdPosition = 0;
-    if (birdPosition > playground.offsetHeight - 50 - 50)
-        birdPosition = playground.offsetHeight - 50 - 50;
-    bird.style.top = birdPosition + "px";
-    pipes.forEach((pipe) => {
-        pipe.position += 3;
-        pipe.top.style.right = pipe.position + "px";
-        pipe.bottom.style.right = pipe.position + "px";
-    });
-    pipes = pipes.filter((pipe) => {
-        if (pipe.position > playground.offsetWidth + 50) {
-            pipe.top.remove();
-            pipe.bottom.remove();
-            return false;
-        }
-        return true;
-    });
-    const birdRect = bird.getBoundingClientRect();
-    let hit = false;
-    pipes.forEach((pipe) => {
-        const topRect = pipe.top.getBoundingClientRect();
-        if (!pipe.scored && topRect.right < birdRect.left) {
-            score++;
-            pipe.scored = true;
-            scoreDisplay.textContent = score;
-        }
-    });
-    pipes.forEach((pipe) => {
-        const topRect = pipe.top.getBoundingClientRect();
-        const bottomRect = pipe.bottom.getBoundingClientRect();
-        if (isColliding(birdRect, topRect) || isColliding(birdRect, bottomRect)) {
+function startGameLoop() {
+    gameLoop = setInterval(() => {
+        // birdPosition = birdPosition + 5;
+        // bird.style.top = birdPosition + "px";
+        birdPosition = birdPosition + 1.5;
+        velocity += 0.5;
+        birdPosition += velocity;
+        if (birdPosition < 0)
+            birdPosition = 0;
+        if (birdPosition > playground.offsetHeight - 50 - 50)
+            birdPosition = playground.offsetHeight - 50 - 50;
+        bird.style.top = birdPosition + "px";
+        pipes.forEach((pipe) => {
+            pipe.position += 5;
+            pipe.top.style.right = pipe.position + "px";
+            pipe.bottom.style.right = pipe.position + "px";
+        });
+        pipes = pipes.filter((pipe) => {
+            if (pipe.position > playground.offsetWidth + 50) {
+                pipe.top.remove();
+                pipe.bottom.remove();
+                return false;
+            }
+            return true;
+        });
+        const birdRect = bird.getBoundingClientRect();
+        let hit = false;
+        pipes.forEach((pipe) => {
+            const topRect = pipe.top.getBoundingClientRect();
+            if (!pipe.scored && topRect.right < birdRect.left) {
+                score++;
+                pipe.scored = true;
+                scoreDisplay.textContent = score;
+            }
+        });
+        pipes.forEach((pipe) => {
+            const topRect = pipe.top.getBoundingClientRect();
+            const bottomRect = pipe.bottom.getBoundingClientRect();
+            if (isColliding(birdRect, topRect) || isColliding(birdRect, bottomRect)) {
+                hit = true;
+            }
+        });
+        if (birdPosition >= playground.offsetHeight - 50 - 50) {
             hit = true;
         }
+        if (hit) {
+            isRunning = false;
+            clearInterval(gameLoop);
+            restart.style.display = "block";
+        }
+    }, 20);
+}
+restart.addEventListener("click", function () {
+    score = 0;
+    scoreDisplay.textContent = 0;
+    birdPosition = 50;
+    bird.style.top = birdPosition + "px";
+    pipes.forEach((pipe) => {
+        pipe.top.remove();
+        pipe.bottom.remove();
     });
-    if (birdPosition >= playground.offsetHeight - 50 - 50) {
-        hit = true;
-    }
-    if (hit) {
-        isRunning = false;
-        clearInterval(gameLoop);
-        restart.style.display = "block";
-    }
-}, 20);
+    pipes = [];
+    isRunning = true;
+    restart.style.display = "none";
+    startGameLoop();
+});
+
 setInterval(() => {
     if (isRunning) {
         createPipe();
