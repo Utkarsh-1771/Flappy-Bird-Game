@@ -72,7 +72,7 @@ function startGameLoop() {
             birdPosition = playground.offsetHeight - 50 - 50;
         bird.style.top = birdPosition + "px";
         pipes.forEach((pipe) => {
-            pipe.position += 5;
+            pipe.position += 4;
             pipe.top.style.right = pipe.position + "px";
             pipe.bottom.style.right = pipe.position + "px";
         });
@@ -114,6 +114,7 @@ function startGameLoop() {
 restart.addEventListener("click", function () {
     score = 0;
     scoreDisplay.textContent = 0;
+    velocity=0;
     birdPosition = 50;
     bird.style.top = birdPosition + "px";
     pipes.forEach((pipe) => {
