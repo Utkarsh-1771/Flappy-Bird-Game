@@ -5,6 +5,8 @@ let pipePosition = 0;
 let pipes = [];
 let gameLoop;
 let velocity = 0;
+const isMobile = window.innerWidth <= 600;
+const spawnInterval = isMobile ? 3500 : 2800;
 const gameOver = document.querySelector(".game-over");
 const finalScore = document.querySelector("#final-score");
 const bird = document.querySelector(".bird");
@@ -81,8 +83,9 @@ function startGameLoop() {
         if (birdPosition > playground.offsetHeight - 50 - 50)
             birdPosition = playground.offsetHeight - 50 - 50;
         bird.style.top = birdPosition + "px";
+        const pipeSpeed = isMobile ? 2.5 : 4;
         pipes.forEach((pipe) => {
-            pipe.position += 4;
+            pipe.position += pipeSpeed;
             pipe.top.style.right = pipe.position + "px";
             pipe.bottom.style.right = pipe.position + "px";
         });
@@ -142,4 +145,4 @@ setInterval(() => {
     if (isRunning) {
         createPipe();
     }
-}, 2000);
+}, spawnInterval);

@@ -93,7 +93,7 @@ button:hover {
 .playground {
     position: relative;
     height: 100%;
-
+    touch-action: manipulation;
 }
 
 @keyframes float {
