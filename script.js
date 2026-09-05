@@ -5,6 +5,8 @@ let pipePosition = 0;
 let pipes = [];
 let gameLoop;
 let velocity = 0;
+const gameOver = document.querySelector(".game-over");
+const finalScore = document.querySelector("#final-score");
 const bird = document.querySelector(".bird");
 const scoreDisplay = document.querySelector("#score");
 const start = document.querySelector("#start-button");
@@ -39,6 +41,11 @@ function isColliding(rectA, rectB) {
         rectA.bottom > rectB.top
     );
 }
+function flap() {
+    if (isRunning) {
+        velocity = -8;
+    }
+}
 
 start.addEventListener("click", function () {
     start.style.display = "none";
@@ -50,7 +57,7 @@ document.addEventListener("keydown", function (event) {
     if (event.code === "Space" && isRunning) {
         event.preventDefault();
         // birdPosition = birdPosition - 40;
-        velocity = -8;              
+        flap();
         bird.style.top = birdPosition + "px";
         if (birdPosition < 0)
             birdPosition = 0;
@@ -59,11 +66,14 @@ document.addEventListener("keydown", function (event) {
         bird.style.top = birdPosition + "px";
     }
 });
+playground.addEventListener("click", function () {
+    flap();
+});
 function startGameLoop() {
     gameLoop = setInterval(() => {
         // birdPosition = birdPosition + 5;
         // bird.style.top = birdPosition + "px";
-        birdPosition = birdPosition + 1.5;
+        // birdPosition = birdPosition + 1.5;
         velocity += 0.5;
         birdPosition += velocity;
         if (birdPosition < 0)
@@ -107,14 +117,15 @@ function startGameLoop() {
         if (hit) {
             isRunning = false;
             clearInterval(gameLoop);
-            restart.style.display = "block";
+            gameOver.style.display = "flex";
+            finalScore.textContent = score;
         }
     }, 20);
 }
 restart.addEventListener("click", function () {
     score = 0;
     scoreDisplay.textContent = 0;
-    velocity=0;
+    velocity = 0;
     birdPosition = 50;
     bird.style.top = birdPosition + "px";
     pipes.forEach((pipe) => {
@@ -123,7 +134,7 @@ restart.addEventListener("click", function () {
     });
     pipes = [];
     isRunning = true;
-    restart.style.display = "none";
+    gameOver.style.display = "none";
     startGameLoop();
 });
 

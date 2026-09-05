@@ -67,10 +67,6 @@ button {
     transition: background-color 0.3s ease;
 }
 
-#restart-button {
-    display: none;
-}
-
 button:hover {
     background: #620606;
 }
@@ -112,6 +108,36 @@ button:hover {
     100% {
         transform: translate(-50%, -50%) translateY(0px);
     }
+}
+
+.game-over {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    /* background: rgba(0, 0, 0, 0.7);
+    gap: 10px;
+    color: white; */
+    /* text-align: center; */
+    z-index: 10;
+}
+
+.game-over-card {
+    background: rgba(0, 0, 0, 0.85);
+    border-radius: 10px;
+    padding: 70px 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    gap: 30px;
+    text-align: center;
 }
 
 #score {}

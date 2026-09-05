@@ -17,12 +17,19 @@
         <main>
             <section class="information">
                 <button id="start-button">Start Game</button>
-                <button id="restart-button">Restart</button>
+                <!-- <button id="restart-button">Restart</button> -->
                 <p aria-live="polite">Score: <span id="score">0</span></p>
             </section>
             <section class="playground">
                 <div class="bird">
                     <img src="assets/images/bird_face.png" alt="Flappy bird image">
+                </div>
+                <div class="game-over">
+                    <div class="game-over-card">
+                        <h2>GAME OVER!</h2>
+                        <p>Final Score: <span id="final-score">0</span></p>
+                        <button id="restart-button">Restart</button>
+                    </div>
                 </div>
                 <div class="ground"></div>
             </section>
