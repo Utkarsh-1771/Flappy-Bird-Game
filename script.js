@@ -5,6 +5,7 @@ let pipePosition = 0;
 let pipes = [];
 let gameLoop;
 let velocity = 0;
+let pipeSpawn;
 const isMobile = window.innerWidth <= 600;
 const spawnInterval = isMobile ? 3500 : 2800;
 const gameOver = document.querySelector(".game-over");
@@ -16,7 +17,7 @@ const restart = document.querySelector("#restart-button");
 bird.style.top = birdPosition + "px";
 const playground = document.querySelector(".playground");
 function createPipe() {
-    const gapHeight = 150;
+    const gapHeight = 170;
     const minGapTop = 50;
     const maxGapTop = playground.offsetHeight - 50 - gapHeight - minGapTop;
     const gapTop = Math.random() * (maxGapTop - minGapTop) + minGapTop;
@@ -45,7 +46,7 @@ function isColliding(rectA, rectB) {
 }
 function flap() {
     if (isRunning) {
-        velocity = -8;
+        velocity = -7;
     }
 }
 
@@ -72,6 +73,7 @@ playground.addEventListener("click", function () {
     flap();
 });
 function startGameLoop() {
+    startPipeSpawn();
     gameLoop = setInterval(() => {
         // birdPosition = birdPosition + 5;
         // bird.style.top = birdPosition + "px";
@@ -138,11 +140,13 @@ restart.addEventListener("click", function () {
     pipes = [];
     isRunning = true;
     gameOver.style.display = "none";
+    clearInterval(pipeSpawn);
     startGameLoop();
 });
-
-setInterval(() => {
-    if (isRunning) {
-        createPipe();
-    }
-}, spawnInterval);
+function startPipeSpawn() {
+    pipeSpawn = setInterval(() => {
+        if (isRunning) {
+            createPipe();
+        }
+    }, spawnInterval);
+}
