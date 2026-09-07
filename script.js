@@ -15,7 +15,7 @@ setInterval(() => {
     gameContainer.style.backgroundImage = `url("${backgroundImages[currentImage]}")`;
 }, 8000);
 const isMobile = window.innerWidth <= 600;
-const spawnInterval = isMobile ? 2300 : 2800;
+const spawnInterval = isMobile ? 2200 : 2800;
 const gameOver = document.querySelector(".game-over");
 const finalScore = document.querySelector("#final-score");
 const bird = document.querySelector(".bird");
