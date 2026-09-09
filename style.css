@@ -10,7 +10,9 @@
 
 h1 {
     font-weight: bold;
+    font-size: 3rem;
     color: #0f0e0e;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
 .game-container {
@@ -155,4 +157,7 @@ main {
     text-align: center;
 }
 
-#score {}
+#score {
+    font-weight: bold;
+    font-size: 1rem;
+}

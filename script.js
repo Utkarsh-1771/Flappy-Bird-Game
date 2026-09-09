@@ -15,7 +15,7 @@ setInterval(() => {
     gameContainer.style.backgroundImage = `url("${backgroundImages[currentImage]}")`;
 }, 8000);
 const isMobile = window.innerWidth <= 600;
-const spawnInterval = isMobile ? 2200 : 2800;
+const spawnInterval = isMobile ? 2150 : 2800;
 const gameOver = document.querySelector(".game-over");
 const finalScore = document.querySelector("#final-score");
 const bird = document.querySelector(".bird");
@@ -25,7 +25,7 @@ const restart = document.querySelector("#restart-button");
 bird.style.top = birdPosition + "px";
 const playground = document.querySelector(".playground");
 function createPipe() {
-    const gapHeight = 170;
+    const gapHeight = isMobile ? 100 : 170;
     const minGapTop = 50;
     const maxGapTop = playground.offsetHeight - gapHeight - minGapTop;
     const gapTop = Math.random() * (maxGapTop - minGapTop) + minGapTop;
@@ -36,7 +36,7 @@ function createPipe() {
     topPipe.style.right = "0px";
     playground.appendChild(topPipe);
     const bottomPipe = document.createElement("div");
-    bottomPipe.classList.add("pipe");   
+    bottomPipe.classList.add("pipe");
     bottomPipe.style.bottom = "0px";
     bottomPipe.style.height = (playground.offsetHeight - gapTop - gapHeight) + "px";
     bottomPipe.style.right = "0px";
