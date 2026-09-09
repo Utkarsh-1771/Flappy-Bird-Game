@@ -7,7 +7,9 @@
     <title>Flappy Bird</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
-    <img src="https://www.google.com/s2/favicons?domain=example.com&sz=64">   
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -17,14 +19,14 @@
         </header>
         <main>
             <section class="information">
-                <button id="start-button">Start Game</button>
                 <!-- <button id="restart-button">Restart</button> -->
-                <p aria-live="polite">Score: <span id="score">0</span></p>
+                <p aria-live="polite" class="final">Score: <span id="score">0</span></p>
             </section>
             <section class="playground">
                 <div class="bird">
                     <img src="assets/images/bird_face.png" alt="Flappy bird image">
                 </div>
+                <button id="start-button">Start Game</button>
                 <div class="game-over">
                     <div class="game-over-card">
                         <h2>GAME OVER!</h2>

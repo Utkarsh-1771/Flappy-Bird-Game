@@ -1,5 +1,5 @@
 let score = 0;
-let birdPosition = 50;
+let birdPosition = 150;
 let isRunning = false;
 let pipePosition = 0;
 let pipes = [];
@@ -139,7 +139,7 @@ restart.addEventListener("click", function () {
     score = 0;
     scoreDisplay.textContent = 0;
     velocity = 0;
-    birdPosition = 50;
+    birdPosition = 150;
     bird.style.top = birdPosition + "px";
     pipes.forEach((pipe) => {
         pipe.top.remove();
