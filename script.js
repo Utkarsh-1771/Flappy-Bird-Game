@@ -25,7 +25,7 @@ const restart = document.querySelector("#restart-button");
 bird.style.top = birdPosition + "px";
 const playground = document.querySelector(".playground");
 function createPipe() {
-    const gapHeight = isMobile ? 120 : 170;
+    const gapHeight = isMobile ? 120 : 500;
     const minGapTop = 50;
     const maxGapTop = playground.offsetHeight - gapHeight - minGapTop;
     const gapTop = Math.random() * (maxGapTop - minGapTop) + minGapTop;
@@ -89,7 +89,9 @@ function startGameLoop() {
         if (birdPosition > playground.offsetHeight - 35)
             birdPosition = playground.offsetHeight - 35;
         bird.style.top = birdPosition + "px";
-        const pipeSpeed = isMobile ? 2.5 : 4;
+        const baseSpeed = isMobile ? 3 : 5;
+        const maxSpeed = isMobile ? 8 : 10;
+        const pipeSpeed = Math.min(baseSpeed + score * 0.4, maxSpeed);
         pipes.forEach((pipe) => {
             pipe.position += pipeSpeed;
             pipe.top.style.right = pipe.position + "px";
