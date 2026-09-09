@@ -67,7 +67,6 @@ start.addEventListener("click", function () {
 document.addEventListener("keydown", function (event) {
     if (event.code === "Space" && isRunning) {
         event.preventDefault();
-        // birdPosition = birdPosition - 40;
         flap();
         bird.style.top = birdPosition + "px";
         if (birdPosition < 0)
@@ -83,9 +82,6 @@ playground.addEventListener("click", function () {
 function startGameLoop() {
     startPipeSpawn();
     gameLoop = setInterval(() => {
-        // birdPosition = birdPosition + 5;
-        // bird.style.top = birdPosition + "px";
-        // birdPosition = birdPosition + 1.5;
         velocity += 0.5;
         birdPosition += velocity;
         if (birdPosition < 0)
