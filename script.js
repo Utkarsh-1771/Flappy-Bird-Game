@@ -7,12 +7,23 @@ let gameLoop;
 let velocity = 0;
 let pipeSpawn;
 const backgroundImages = ["assets/images/background_image_1.jpg", "assets/images/background_image_2.jpg", "assets/images/background_image_3.jpg"];
+const bgLayer1 = document.querySelector("#bg-layer-1");
+const bgLayer2 = document.querySelector("#bg-layer-2");
+let activeLayer = bgLayer1;
+let inactiveLayer = bgLayer2;
 let currentImage = 0;
 const gameContainer = document.querySelector(".game-container");
-gameContainer.style.backgroundImage = `url("${backgroundImages[currentImage]}")`;
+bgLayer1.style.backgroundImage = `url("${backgroundImages[currentImage]}")`;
+bgLayer1.style.opacity = "1";
+bgLayer2.style.opacity = "0";
 setInterval(() => {
     currentImage = (currentImage + 1) % backgroundImages.length;
-    gameContainer.style.backgroundImage = `url("${backgroundImages[currentImage]}")`;
+    inactiveLayer.style.backgroundImage = `url("${backgroundImages[currentImage]}")`;
+    inactiveLayer.style.opacity = "1";
+    activeLayer.style.opacity = "0";
+    const temp = activeLayer;
+    activeLayer = inactiveLayer;
+    inactiveLayer = temp;
 }, 8000);
 const isMobile = window.innerWidth <= 600;
 const spawnInterval = isMobile ? 2150 : 2800;
@@ -25,7 +36,7 @@ const restart = document.querySelector("#restart-button");
 bird.style.top = birdPosition + "px";
 const playground = document.querySelector(".playground");
 function createPipe() {
-    const gapHeight = isMobile ? 120 : 500;
+    const gapHeight = isMobile ? 120 : 170;
     const minGapTop = 50;
     const maxGapTop = playground.offsetHeight - gapHeight - minGapTop;
     const gapTop = Math.random() * (maxGapTop - minGapTop) + minGapTop;
@@ -57,7 +68,6 @@ function flap() {
         velocity = -7;
     }
 }
-
 start.addEventListener("click", function () {
     start.style.display = "none";
     isRunning = true;
@@ -76,6 +86,15 @@ document.addEventListener("keydown", function (event) {
         bird.style.top = birdPosition + "px";
     }
 });
+document.addEventListener("keydown", function (event) {
+    if (start.style.display !== "none" && event.code === "Enter") {
+        start.click();
+    }
+    else if (event.code === "Enter" && gameOver.style.display !== "none") {
+        restart.click();
+    }
+});
+
 playground.addEventListener("click", function () {
     flap();
 });
@@ -90,8 +109,8 @@ function startGameLoop() {
             birdPosition = playground.offsetHeight - 35;
         bird.style.top = birdPosition + "px";
         const baseSpeed = isMobile ? 3 : 5;
-        const maxSpeed = isMobile ? 8 : 10;
-        const pipeSpeed = Math.min(baseSpeed + score * 0.4, maxSpeed);
+        const maxSpeed = isMobile ? 17 : 20;
+        const pipeSpeed = Math.min(baseSpeed + score * 0.3, maxSpeed);
         pipes.forEach((pipe) => {
             pipe.position += pipeSpeed;
             pipe.top.style.right = pipe.position + "px";
