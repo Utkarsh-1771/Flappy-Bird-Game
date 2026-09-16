@@ -65,7 +65,7 @@ function isColliding(rectA, rectB) {
 }
 function flap() {
     if (isRunning) {
-        velocity = -7;
+        velocity =isMobile?-5:-7;
     }
 }
 start.addEventListener("click", function () {
