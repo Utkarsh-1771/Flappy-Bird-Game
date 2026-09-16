@@ -26,7 +26,7 @@ setInterval(() => {
     inactiveLayer = temp;
 }, 8000);
 const isMobile = window.innerWidth <= 600;
-const spawnInterval = isMobile ? 2150 : 2800;
+const spawnInterval = isMobile ? 2250 : 2800;
 const gameOver = document.querySelector(".game-over");
 const finalScore = document.querySelector("#final-score");
 const bird = document.querySelector(".bird");
@@ -101,7 +101,7 @@ playground.addEventListener("click", function () {
 function startGameLoop() {
     startPipeSpawn();
     gameLoop = setInterval(() => {
-        velocity += 0.5;
+        velocity +=isMobile?0.3: 0.5;
         birdPosition += velocity;
         if (birdPosition < 0)
             birdPosition = 0;
