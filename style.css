@@ -6,6 +6,9 @@
 
 :root {
     --button-color: #9d1919;
+    --pipe-dark: #2d5a0e;
+    --pipe-mid: #73bf2e;
+    --pipe-light: #b6ef6b;
 }
 
 h1 {
@@ -59,16 +62,48 @@ main {
 }
 
 .pipe {
-    background: greenyellow;
-    width: 50px;
-    height: 300px;
     position: absolute;
+    left: 0;
     top: 0;
-    right: 0;
-    border: 3.5px solid black;
-    border-radius: 5px;
+    width: 70px;
+    z-index: 5;
+    will-change: transform;
+    border: 3px solid var(--pipe-dark);
+    background: linear-gradient(90deg,
+            var(--pipe-mid) 0%,
+            var(--pipe-light) 18%,
+            var(--pipe-mid) 40%,
+            #5aa21f 75%,
+            var(--pipe-dark) 100%);
 }
-    
+
+.pipe-top {
+    border-top: none;
+}
+
+.pipe-bottom {
+    border-bottom: none;
+}
+
+.pipe::after {
+    content: "";
+    position: absolute;
+    left: -8px;
+    right: -8px;
+    height: 26px;
+    border: 3px solid var(--pipe-dark);
+    border-radius: 3px;
+    background: inherit;
+}
+
+.pipe-top::after {
+    bottom: -3px;
+}
+
+.pipe-bottom::after {
+    top: -3px;
+}
+
 button {
     padding: 12px 26px;
     border: 4px solid #4b3517;
@@ -129,11 +164,6 @@ button:active {
         height: 30px;
     }
 
-    .pipe {
-        width: 30px;
-        height: 200px;
-    }
-
     h1 {
         margin-top: 10px;
         margin-left: 10px;
@@ -151,7 +181,6 @@ button:active {
         font-size: 0.8rem;
         color: greenyellow;
     }
-
 }
 
 .playground {
@@ -160,6 +189,7 @@ button:active {
     left: 0;
     right: 0;
     bottom: 0;
+    overflow: hidden;
     touch-action: manipulation;
 }
 
@@ -175,7 +205,6 @@ button:active {
 #start-button:active {
     transform: translateY(-7px) scale(1.3);
 }
-
 
 @keyframes float {
     0% {

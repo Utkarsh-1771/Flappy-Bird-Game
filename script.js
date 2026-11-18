@@ -1,7 +1,6 @@
 let score = 0;
 let birdPosition = 150;
 let isRunning = false;
-let pipePosition = 0;
 let pipes = [];
 let gameLoop;
 let velocity = 0;
@@ -35,25 +34,54 @@ const start = document.querySelector("#start-button");
 const restart = document.querySelector("#restart-button");
 bird.style.top = birdPosition + "px";
 const playground = document.querySelector(".playground");
+const pipeWidth = isMobile ? 46 : 70;
+const initialGap = isMobile ? 150 : 185;
+const minGap = isMobile ? 115 : 140;
+
+function currentGap() {
+    return Math.max(initialGap - score * 1.5, minGap);
+}
+
+function placePipe(pipe) {
+    const t = `translateX(${pipe.x}px)`;
+    pipe.top.style.transform = t;
+    pipe.bottom.style.transform = t;
+}
+
 function createPipe() {
-    const gapHeight = isMobile ? 120 : 170;
-    const minGapTop = 50;
-    const maxGapTop = playground.offsetHeight - gapHeight - minGapTop;
-    const gapTop = Math.random() * (maxGapTop - minGapTop) + minGapTop;
-    const topPipe = document.createElement("div");
-    topPipe.classList.add("pipe");
-    topPipe.style.top = "0px";
-    topPipe.style.height = gapTop + "px";
-    topPipe.style.right = "0px";
-    playground.appendChild(topPipe);
-    const bottomPipe = document.createElement("div");
-    bottomPipe.classList.add("pipe");
-    bottomPipe.style.bottom = "0px";
-    bottomPipe.style.height = (playground.offsetHeight - gapTop - gapHeight) + "px";
-    bottomPipe.style.right = "0px";
-    bottomPipe.style.top = "auto";
-    playground.appendChild(bottomPipe);
-    pipes.push({ top: topPipe, bottom: bottomPipe, position: 0, scored: false });
+    const gap = currentGap();
+    const H = playground.clientHeight;
+    const margin = 60;
+    const prev = pipes.length ? pipes[pipes.length - 1].gapTop : H / 2 - gap / 2;
+    const maxShift = H * 0.45;
+    const lo = Math.max(margin, prev - maxShift);
+    const hi = Math.min(H - gap - margin, prev + maxShift);
+    const gapTop = lo + Math.random() * Math.max(hi - lo, 0);
+
+    const top = document.createElement("div");
+    top.className = "pipe pipe-top";
+    top.style.height = gapTop + "px";
+    top.style.width = pipeWidth + "px";
+
+    const bottom = document.createElement("div");
+    bottom.className = "pipe pipe-bottom";
+    bottom.style.top = gapTop + gap + "px";
+    bottom.style.height = H - gapTop - gap + "px";
+    bottom.style.width = pipeWidth + "px";
+
+    playground.insertBefore(top, bird);
+    playground.insertBefore(bottom, bird);
+    const pipe = { top, bottom, x: playground.clientWidth, gapTop, gap, scored: false };
+    placePipe(pipe);
+    pipes.push(pipe);
+}
+
+function clearPipes() {
+    pipes.forEach((p) => {
+        p.top.remove();
+        p.bottom.remove();
+    });
+    pipes = [];
 }
 function isColliding(rectA, rectB) {
     return (
@@ -65,7 +93,7 @@ function isColliding(rectA, rectB) {
 }
 function flap() {
     if (isRunning) {
-        velocity =isMobile?-5:-7;
+        velocity = isMobile ? -5 : -7;
     }
 }
 start.addEventListener("click", function () {
@@ -101,7 +129,7 @@ playground.addEventListener("click", function () {
 function startGameLoop() {
     startPipeSpawn();
     gameLoop = setInterval(() => {
-        velocity +=isMobile?0.3: 0.5;
+        velocity += isMobile ? 0.3 : 0.5;
         birdPosition += velocity;
         if (birdPosition < 0)
             birdPosition = 0;
@@ -112,12 +140,11 @@ function startGameLoop() {
         const maxSpeed = isMobile ? 17 : 20;
         const pipeSpeed = Math.min(baseSpeed + score * 0.3, maxSpeed);
         pipes.forEach((pipe) => {
-            pipe.position += pipeSpeed;
-            pipe.top.style.right = pipe.position + "px";
-            pipe.bottom.style.right = pipe.position + "px";
+            pipe.x -= pipeSpeed;
+            placePipe(pipe);
         });
         pipes = pipes.filter((pipe) => {
-            if (pipe.position > playground.offsetWidth + 50) {
+            if (pipe.x < -pipeWidth - 20) {
                 pipe.top.remove();
                 pipe.bottom.remove();
                 return false;
@@ -158,11 +185,7 @@ restart.addEventListener("click", function () {
     velocity = 0;
     birdPosition = 150;
     bird.style.top = birdPosition + "px";
-    pipes.forEach((pipe) => {
-        pipe.top.remove();
-        pipe.bottom.remove();
-    });
-    pipes = [];
+    clearPipes();
     isRunning = true;
     gameOver.style.display = "none";
     clearInterval(pipeSpawn);
